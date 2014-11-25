@@ -1,0 +1,331 @@
+<html>
+<head>
+
+</head>
+<title>ARM-RUN EDITOR</title>
+
+<style type="text/css" media="screen">
+	body {
+		background-color:#E5F4F4;
+	} header {
+		background-color: transparent;
+		color:#0101DF;
+		text-align:left;
+		padding:5px;
+		font-family: "Times New Roman", Times, serif;
+		font-size: 20px;
+		font-weight: 900;
+	} nav {
+		line-height:30px;
+		background-color:white;
+		height:800px;
+		width:250px;
+		float:left;
+		padding:5px; 
+		border-style: groove;
+		border-color: #FFCCFF;
+		border-left : none;
+		border-top : none;
+		border-bottom : none;     
+	} nav:hover{
+		background-color:white;
+	} footer {
+		background-color:black;
+		color:white;
+		clear:both;
+		text-align:center;
+		padding:5px;	 
+	} #ttle {
+		text-align: center;
+		height:80px;
+		font-size: 30px;
+		font-family: cambria math;
+	} #textin { 
+        position: absolute;
+        top: 110px;
+        left: 280px;
+		width: 600px;
+		min-height:460px;
+		border-style: groove;
+		border-color: #FFCCFF;
+    } #out { 
+        position: absolute;
+        top: 110px;
+        left: 900px;
+		width:430px;
+		min-height:463px;
+    } #savetext {
+		position: absolute;        
+        left: 900px;
+		top: 585px;
+		-webkit-border-radius: 6;
+		-moz-border-radius: 6;
+		border-radius: 6px;
+		text-shadow: 0px 1px 30px #666666;
+		font-family: Courier New;
+		color: #ffffff;
+		font-size: 12px;
+		padding: 5px;
+		background: #3333cc;
+		text-decoration: none;
+	} #savetext:hover {
+		background: #344fd9;
+		background-image: -webkit-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -moz-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -ms-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -o-linear-gradient(top, #344fd9, #3491d9);
+		background-image: linear-gradient(to bottom, #344fd9, #3491d9);
+		text-decoration: none;
+	} #inputFileNameToSaveAs {
+	    position: absolute;        
+		left: 1060px;
+		top: 588px;
+	} #loadtext {
+		position: absolute;        
+        left: 480px;
+		top: 47px;
+		-webkit-border-radius: 6;
+		-moz-border-radius: 6;
+		border-radius: 6px;
+		text-shadow: 0px 1px 30px #666666;
+		font-family: Courier New;
+		color: #ffffff;
+		font-size: 12px;
+		padding: 5px;
+		background: #3333cc;
+		text-decoration: none;
+	}#loadtext:hover {
+		background: #344fd9;
+		background-image: -webkit-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -moz-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -ms-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -o-linear-gradient(top, #344fd9, #3491d9);
+		background-image: linear-gradient(to bottom, #344fd9, #3491d9);
+		text-decoration: none;
+	} #stin { 
+        position: absolute;
+        top: 620px;
+        left: 280px;
+		width: 500px;
+		min-height:80px;
+    } #submit {
+		position: absolute;        
+        left: 790px;
+		top:620px;
+		min-height:80px;
+		min-width:5px;
+		-webkit-border-radius: 6;
+		-moz-border-radius: 6;
+		border-radius: 6px;
+		text-shadow: 0px 1px 30px #666666;
+		font-family: Courier New;
+		color: #ffffff;
+		font-size: 12px;
+		padding: 5px;
+		background: #3333cc;
+		text-decoration: none;
+	}#submit:hover {
+		background: #344fd9;
+		background-image: -webkit-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -moz-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -ms-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -o-linear-gradient(top, #344fd9, #3491d9);
+		background-image: linear-gradient(to bottom, #344fd9, #3491d9);
+		text-decoration: none;
+	} #theOut {
+		position: absolute;        
+        left: 429px;
+		bottom:3%;
+	} #head {
+		position: absolute;        
+        left: 0px;
+		top:0px;
+		min-height: 51%;
+	} <!--#editpng {
+		position: absolute;        
+        left: 280px;
+		top:80px;
+		height: 20px;
+		width: 20px;
+	}--> #editdiv {
+		position: absolute;        
+        left: 310px;
+		top:80px;
+		height: 20px;
+	} #inpng {
+		position: absolute;        
+        left: 280px;
+		top:590px;
+		height: 20px;
+		width: 20px;
+	} #indiv {
+		position: absolute;        
+        left: 310px;
+		top:592px;
+		height: 20px;
+	} #outputpng {
+		position: absolute;        
+        left: 900px;
+		top:80px;
+		height: 30px;
+		width: 30px;
+	} #outdiv {
+		position: absolute;        
+        left: 900px;
+		top:80px;
+		height: 20px;
+	} .custom-file-input::-webkit-file-upload-button {
+		visibility: hidden;
+	} .custom-file-input::before {
+		content: 'Browse...';
+		display: inline-block;
+		top: 45px;
+		-webkit-border-radius: 6;
+		-moz-border-radius: 6;
+		border-radius: 6px;
+		text-shadow: 0px 1px 30px #666666;
+		font-family: Courier New;
+		color: #ffffff;
+		font-size: 12px;
+		padding: 5px;
+		background: #3333cc;
+		text-decoration: none;
+	} .custom-file-input:hover::before {
+		border-color: white;
+	} .custom-file-input:active::before {
+		background: #344fd9;
+		background-image: -webkit-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -moz-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -ms-linear-gradient(top, #344fd9, #3491d9);
+		background-image: -o-linear-gradient(top, #344fd9, #3491d9);
+		background-image: linear-gradient(to bottom, #344fd9, #3491d9);
+		text-decoration: none;
+	}
+</style>
+
+<body>
+
+<nav><img src="logo.png"></nav>
+<header> Enter your source code	or upload a file from your computer</header>
+
+<img id="editpng" src="edit.png">
+<div id="editdiv">Source code:</div>
+
+<img id="inpng" src="input.png">
+<div id="indiv">Standard input:</div>
+
+<!--img id=outputpng" src="output.png"-->
+<div id="outdiv">Output:</div>
+
+<table>
+	
+<tr>
+	
+<td colspan="3">
+<div id="textin">@Enter your code here
+
+	.text		
+	.global main
+main:                        
+	
+	.data 	 
+</div>
+
+<div id="div1">
+</td>
+</tr>
+
+<tr>
+<td><input id="inputFileNameToSaveAs"></input></td>
+<td><button id="savetext" onclick="saveTextAsFile()">Save output to File:</button></td>
+</tr>
+
+<tr>
+<!--<td>Select a File to Load:</td>-->
+<td><input type="file" id="fileToLoad" class="custom-file-input"></td>
+<td><button id="loadtext" onclick="loadFileAsText();">Load Selected File</button><td>
+</tr>
+</div>
+
+</table>
+
+<div id="outpane">
+
+<textarea id="theOut" name="toCompiler" style="display:none"></textarea>
+<input id="submit" type="button" value="Compile/Run" />
+<textarea id="stin" name="toComp" style="resize:none; display; background-color: transparent" placeholder="Standard input" ></textarea>
+
+</div>
+
+<textarea style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Standard output" id="out" name="comment" ;></textarea>
+
+<footer>
+Developed by ARM 2
+</footer>
+
+<script type = "text/javascript" src="jquery-1.11.1.js"></script>
+<script type = "text/javascript" src="ajax.js"></script>
+
+<script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("textin");
+    editor.setTheme("ace/theme/textmate");
+    editor.getSession().setMode("ace/mode/assembly_x86");
+</script>
+
+<script type='text/javascript'>
+
+function saveTextAsFile()
+{
+	var textToWrite = document.getElementById("out").value;
+
+	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+	var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+
+	var downloadLink = document.createElement("a");
+	downloadLink.download = fileNameToSaveAs;
+	downloadLink.innerHTML = "Download File";
+	if (window.webkitURL != null)
+	{
+		// Chrome allows the link to be clicked
+		// without actually adding it to the DOM.
+		downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+	}
+	else
+	{
+		// Firefox requires the link to be added to the DOM
+		// before it can be clicked.
+		downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+		downloadLink.onclick = destroyClickedElement;
+		downloadLink.style.display = "none";
+		document.body.appendChild(downloadLink);
+	}
+
+	downloadLink.click();
+}
+
+function destroyClickedElement(event)
+{
+	document.body.removeChild(event.target);
+}
+
+function loadFileAsText()
+{
+	var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+	var fileReader = new FileReader();
+	fileReader.onload = function(fileLoadedEvent) 
+	{
+		textin.getSelectedText = function() {
+    		this.session.getTextRange(this.getSelectionRange())
+} 
+		var textFromFileLoaded = fileLoadedEvent.target.result;
+		editor.setValue(textFromFileLoaded);
+	};
+	fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+</script>
+
+</body>
+</html>
