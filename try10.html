@@ -200,6 +200,8 @@
 		background-image: -o-linear-gradient(top, #344fd9, #3491d9);
 		background-image: linear-gradient(to bottom, #344fd9, #3491d9);
 		text-decoration: none;
+	} #line_number:
+		width: 10px;
 	}
 </style>
 
@@ -207,8 +209,36 @@
 
 <nav>
 <img src="logo.png">
-<button id="cool" onclick="tee()">Cool</button>
-<div id="ree"></div>
+<button id="assemble" onclick="map_commands()">Assemble</button>
+
+Line number:<input type="text" id="line_number">
+<table>
+  <tr>
+    <th>Register</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>r1</td>
+    <td id="r1">Not assigned</td>
+  </tr>
+  <tr>
+    <td>r2</td>
+    <td id="r2">Not assigned</td>
+  </tr>
+  <tr>
+    <td>r3</td>
+    <td id="r3">Not assigned</td>
+  </tr>
+  <tr>
+    <td>r4</td>
+    <td id="r4">Not assigned</td>
+  </tr>
+  <tr>
+    <td>r5</td>
+    <td id="r5">Not assigned</td>
+  </tr>
+</table>
+
 </nav>
 <header> Enter your source code	or upload a file from your computer</header>
 
@@ -269,6 +299,7 @@ Developed by ARM 2
 
 <script type = "text/javascript" src="jquery-1.11.1.js"></script>
 <script type = "text/javascript" src="ajax.js"></script>
+<script type = "text/javascript" src="blocks.js"></script>
 
 <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -328,31 +359,6 @@ function loadFileAsText()
 	};
 	fileReader.readAsText(fileToLoad, "UTF-8");
 }
-function tee()
-{
-	var tt=editor.getCopyText();
-	var ttarr  = tt.split("\n");
-	var re = /mov*/ig;
-    var midstring;
-    var i;
-    for(i=0;i<ttarr.length;i++)
-    { 
-		if (re.test(ttarr[i])) {
-			var ary = ttarr[i].split(" ");
-			
-			var j;
-		    for(j=0;i<ary.length;j++)
-			{
-				alert(ary[j]);
-			}
-		} else {
-			midstring = " does not contain ";
-		}
-		alert(ttarr[i]+midstring);
-	}
-    
-}
-
 	
 </script>
 
