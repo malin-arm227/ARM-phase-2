@@ -1,6 +1,10 @@
 
 /*set of registers*/
 var r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,sp,lr,pc;
+/*starting stack pointer*/
+
+
+
 /*put data to data memory*/
 var data_array = ["","","",""];
 var label_array = ["","","",""];
@@ -74,7 +78,7 @@ function get_val(src1_reg){
 /*function to split the line*/
 function splittoreg (atr_arr){
 	var str = atr_arr.trim();
-	var regs_add = str.split(/[\s|,|cmp|mov|add|sub|beq|bne|b|ldr]+/);
+	var regs_add = str.split(/[\s|,|cmp|mov|add|sub|beq|bne|b]+/);
 	var return_reg  = new Object();
 	var k=0;
 	//alert(regs_add.length);
@@ -95,6 +99,9 @@ function map_commands()
 	var tot_instr = 0;
 	
 	reset_regs();
+	
+	
+	
 	/*putting the text to an array*/
 	var tt = editor.getValue();
 	var ttarr = tt.split("\n");
@@ -123,7 +130,9 @@ function map_commands()
 	for (i=0;i<no_of_lines;i++){
 		document.getElementById('pc').innerHTML=(i+1);
 		document.getElementById('instructions').innerHTML=tot_instr;
+		
 		if ((ttarr[i].indexOf("mov") > -1)&(ttarr[i].indexOf(":") < 0)) {
+			alert("Enterring mov");
 			implement_mov(ttarr[i]);
 			tot_instr++;
 		}
@@ -147,11 +156,19 @@ function map_commands()
 			}
 			else {i = t}; 
 		}
-		else if (((ttarr[i].indexOf("b ") > -1)|(ttarr[i].indexOf("b	") > -1))&(ttarr[i].indexOf(":") < 0)) {
-			implement_branch(ttarr[i]);
+		else if (((ttarr[i].indexOf("b ") > -1)|(ttarr[i].indexOf("b	") > -1)|(ttarr[i].indexOf("bl") > -1))&(ttarr[i].indexOf(":") < 0)) {
+			implement_branch(ttarr[i],(i+1));
+			tot_instr++;
 		}
 		else if ((ttarr[i].indexOf("ldr") > -1)&(ttarr[i].indexOf(":") < 0)) {
-			implement_load(ttarr[i]);
+			var t=implement_load(ttarr[i]);
+			alert(t);
+			tot_instr++;
+		}
+		else if ((ttarr[i].indexOf("str") > -1)&(ttarr[i].indexOf(":") < 0)) {
+			alert("RRRRR");
+			implement_store(ttarr[i]);
+			//alert(t);
 			tot_instr++;
 		}
 	}
@@ -161,13 +178,13 @@ function map_commands()
 	/*--------------------------------------------------------------------------------------------------------------*/
 /*implements the mov command*/
 function implement_mov(str){
-	//alert("IN move");
+	alert("IN move");
 	var reg_vals = splittoreg(str);
 			
 			var register = reg_vals[0];
-			//alert("Register: "+register);
+			alert("Register: "+register);
 			var register_val = reg_vals[1];
-			//alert("Value: "+register_val);
+			alert("Value: "+register_val);
 			if (register_val.indexOf("#") < 0){
 				if (register_val.indexOf("r0") > -1) register_val = r0;
 				else if (register_val.indexOf("r1") > -1) register_val = r1;
@@ -215,12 +232,22 @@ function implement_add(str){
 /*--------------------------------------------------------------------------------------------------------------*/
 /*implements the sub command*/
 function implement_sub(str){
-	var regs = splittoreg(str);
 	
+	if (str.indexOf("sp") > -1){
+		handle_sp(str);
+		return;
+	}
+	
+	var regs = splittoreg(str);
+	alert("in sub");
 	var dest_reg = regs[0];
 	var src1_reg = regs[1];
 	var src2_reg = regs[2];
-	
+	alert(src1_reg);
+	if (dest_reg=="sp") {
+		sub_sp();
+		return;
+	}
 	var temp = get_val(src1_reg);
 	var val1 = drop_hash(temp);
 	
@@ -237,6 +264,29 @@ function implement_sub(str){
 	put_vals(dest_reg,val_ans);
 }
 /*--------------------------------------------------------------------------------------------------------------*/
+/*sub_sp*/
+function handle_sp(str){
+	var str1 = str.trim();
+	var regs = str1.split(/[\s|,]+/);
+	
+	var command = regs[0];
+	var dest_reg = regs[1];
+	var src1_reg = regs[2];
+	var src2_reg = regs[3];
+	
+	var val2 = drop_hash(src2_reg);
+
+	var val1 = get_val(src1_reg);
+	
+	
+	
+	var dest_numb = val1 - val2;
+	alert("GDSFGF"+dest_numb);
+	var dest_string = "i"+dest_numb.toString();
+	sp = dest_numb;
+	document.getElementById('sp').innerHTML=dest_numb;
+	 
+}
 /*utiltiy functions*/
 function drop_hash(str) { //eg:str = #45
 	var num = str.split("#");
@@ -293,10 +343,8 @@ function implement_conditional_branch(str,condition,i) {
 	var command = regs_add[0];
 	var label = regs_add[1];
 	
-	//alert ("Still in fun1");
 	/*handling beq*/
 	if ((command=="beq")&(condition == 0)){
-		//alert("Enter fun2");
 		var w = find_label(label);
 		//alert("found label: "+w);
 		////alert ("Still in fun2");
@@ -323,30 +371,26 @@ function implement_conditional_branch(str,condition,i) {
 	}
 }
 /*--------------------------------------------------------------------------------------------------------------*/
-function implement_branch(str){
+function implement_branch(str,line){
 	var str1 = str.trim();
 	var regs_add = str1.split(/[\s|,]+/);
 	
 	var command = regs_add[0];
 	var label = regs_add[1];
-	//alert("Command:---"+command+"---");
-	//alert("Label:---"+label+"---");
+	
 	/*handling b*/
 	if (command=="b"){
-		//alert("Enter fun2");
 		var w = find_label(label);
-		alert("found label: "+w);
-		////alert ("Still in fun2");
 		return w;
 	}
-	/*handling bl
-	else if ((command=="bl")&(condition > 0)){
-		//alert("Enter fun2");
-		var w = find_label(label);
-		alert("found label: "+w);
-		////alert ("Still in fun2");
-		return w;
-	}*/
+	
+	/*handling bl*/
+	else if ((command=="bl")){
+		var w = 0;//find_label(label);
+		alert("found label:");
+		document.getElementById('lr').innerHTML=(line+1);
+		return (line+1);
+	}
 }
 /*--------------------------------------------------------------------------------------------------------------*/
 /*implements load instruction*/
@@ -368,6 +412,35 @@ function implement_load(strng){
 		alert(index_add);
 		document.getElementById(dest_reg).innerHTML=index_add;
 	}
+} 
+/*--------------------------------------------------------------------------------------------------------------*/
+/*implements store instruction*/
+function implement_store(strng){
+	//alert("OOOOOOO");
+	var str = strng.trim();
+	var regs = str.split(/[\s|,]+/);
+		
+	var dest_reg = regs[1];
+	var mem1 = regs[2];
+	var val1 = regs[3];
+	//alert(mem1);
+	var mem_loc = mem1.split("[");
+	var mem_val = val1.split("]")
+	
+	var sp_val = get_val(mem_loc);
+	var val = drop_hash(mem_val[0]);
+	
+	var sp_new = sp_val + val;
+	alert("---"+typeof(sp_val)+"---");
+	alert("---"+sp_new+"---");
+	
+	if(sp_new>15) {
+		alert("Stack exceeds");
+		return;
+	}
+	lr = sp_new;
+	document.getElementById('lr').innerHTML=sp_new;
+	return;
 }
 /*handles data memory*/
 function handle_data(ttarr,total_lines){
@@ -405,6 +478,8 @@ function handle_data(ttarr,total_lines){
 /*--------------------------------------------------------------------------------------------------------------*/
 /*Resets the registers*/
 function reset_regs(){
+	sp=15;
+	document.getElementById('sp').innerHTML=sp;
 	var regs = ["r0","r1","r2","r3","r4","r5","r6","r7","r8","r9","r10","r11","r12","sp","lr","pc","d00","d01","d02","d03","n00","n01","n02","n03","instructions"];
 	for (i=0;i<regs.length;i++){
 		document.getElementById(regs[i]).innerHTML="-";
