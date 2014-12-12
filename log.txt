@@ -1,0 +1,71 @@
+commit d4989b01024e18242ddd1bd20111e1d3e669f0b2
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 11 20:24:33 2014 +0530
+
+    all the images
+
+commit 1c9a38d2d44336d7fad48eb24b3e46863b965e95
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 11 20:19:54 2014 +0530
+
+    jquery file
+
+commit edee3ccc2af60dac6a6a386a50ae1cfb4285c635
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 11 20:16:04 2014 +0530
+
+    ace folder
+
+commit f85984e3abbd8d805dfc0c82c1fcb2dd7ef2ef72
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 11 20:13:32 2014 +0530
+
+    updated javascript file with functions for more instructions
+
+commit 9344a1b79dd5951585879c0a453c25cee242255d
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 11 20:07:36 2014 +0530
+
+    this is the new version of the web page
+
+commit f0bf03834e815efd9a2e16dd735db3bcae863651
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Sun Dec 7 16:48:51 2014 +0530
+
+    now has cpabiltiy to handle str and ldr
+
+commit 7d545f52970e95f3bdb8d9d576dde0fb752c8991
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Sun Dec 7 11:53:30 2014 +0530
+
+    css styling now in seperate file
+
+commit 989180297162764074f08da0d3e7793c516f54cf
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Sun Dec 7 11:44:21 2014 +0530
+
+    blocks.js deprecated. process.js is better and has more functions
+
+commit 1432d80be5ab25cdcaa1e0fc4c57ff1f36b6e718
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Sun Dec 7 11:43:32 2014 +0530
+
+    added new properties to the nav bar
+
+commit 378ef9d9141b48e2d32671afa5ef23272414b98e
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Tue Nov 25 17:53:31 2014 +0530
+
+    successfully added register handling, works for mov, ignores comments, adds branch labels to a hashmap
+
+commit 5c1c6937a39c942519c5e71f09f8199ef7f169a0
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Tue Nov 25 17:48:58 2014 +0530
+
+    trying to add a register handling javascript code
+
+commit e3a5de46cdde1a050b942492f7866bd293493cc2
+Author: malin <malinprematilake@gmail.com>
+Date:   Tue Nov 25 17:23:05 2014 +0530
+
+    phase1 files, all presented
