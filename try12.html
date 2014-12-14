@@ -20,7 +20,7 @@
 <input type="radio" id="format_dec" name="typef" value="Dec"  checked="checked" onclick="change_format()" />Dec<br />
 
 No. of instructions:<div id="instructions">0</div> 
-Line number:<input type="text" id="line_number" name="eee">
+Line number:<input type="text" id="line_number" name="eee" size="4">
 <table id ="regs" border="1">
   <tr>
     <th>Register</th>
@@ -178,7 +178,7 @@ Line number:<input type="text" id="line_number" name="eee">
 <!--img id=outputpng" src="output.png"-->
 <div id="outdiv">Output:</div>
 
-<table>
+<table id = "dfr">
 	
 <tr>
 	
@@ -219,7 +219,7 @@ main:
 </div>
 
 <textarea readonly style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Standard output" id="out" name="comment" ;></textarea>
-
+<textarea readonly style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Instruction memory" id="inmem" name="instructions_mem" ;></textarea>
 <footer>
 Developed by ARM 2
 </footer>
@@ -227,6 +227,7 @@ Developed by ARM 2
 <script type = "text/javascript" src="jquery-1.11.1.js"></script>
 <script type = "text/javascript" src="ajax.js"></script>
 <script type = "text/javascript" src="pro1.js"></script>
+<script type = "text/javascript" src="insmem.js"></script>
 
 <script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
@@ -241,7 +242,7 @@ Developed by ARM 2
 
 function saveTextAsFile()
 {
-	var textToWrite = document.getElementById("out").value;
+	var textToWrite = document.getElementById("textin").value;
 
 	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
 	var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;

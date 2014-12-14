@@ -11,7 +11,7 @@ body {
 	} nav {
 		line-height:30px;
 		background-color:white;
-		height:800px;
+		height:900px;
 		width:250px;
 		float:left;
 		padding:5px; 
@@ -195,4 +195,19 @@ body {
 		text-decoration: none;
 	} #line_number:
 		width: 10px;
+	} #regs {
+		position: absolute;        
+        left: 0px;
+		top:10px;
+	} #stack {
+		position: absolute;        
+        left: 130px;
+		top:364px;
+		width: 125px
+	} #inmem { 
+        position: absolute;
+        top: 720px;
+        left: 280px;
+		width: 1100px;
+		min-height:180px;
 	}
