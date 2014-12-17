@@ -1,3 +1,15 @@
+commit f431a5440b5d88180d9face3b5d8b66117b02618
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Wed Dec 17 09:28:20 2014 +0530
+
+    instruction memory done, final css applied, move up and move down are working
+
+commit 0fa5fed46b009ecf3dfccf187afa40222d02e8c8
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Sun Dec 14 21:59:41 2014 +0530
+
+    log after insmem.js commit
+
 commit 2c6398ca8e3d8fee4a2026c75300322c00ae8352
 Author: malin <e11313@ce.pdn.ac.lk>
 Date:   Sun Dec 14 21:58:20 2014 +0530
