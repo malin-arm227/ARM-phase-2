@@ -34,13 +34,19 @@ function put_data(){
 function put_vals(dest_reg,val_ans_given){//val_ans_given is a number
 	
 	var val_ans;
+	
 	if (document.getElementById('format_hex').checked){
 		val_ans = val_ans_given.toString(16);
 	}
 	else if (document.getElementById('format_bin').checked){
 		val_ans = val_ans_given.toString(2);
 	}
+	
+	if (typeof(val_ans_given)=='string') {
+		val_ans = val_ans_given;
+	}
 	else {
+		//alert("val: "+typeof(val_ans_given));
 		val_ans = val_ans_given.toString();
 	}
 	//alert(dest_reg);
@@ -141,83 +147,102 @@ function splittoreg (atr_arr){
 /*main function*/
 function map_commands()
 {	
-		create_mem();
+		reset_regs();
+		
+		var arrays = create_mem();
+		
+		var t_instrr_array = arrays[0];
+		var t_addrrr_array = arrays[1];
+		var ttarr = arrays[2];
+		var count = arrays[3];
+		
+		var instrr_array = new Array(count);
+		var addrrr_array = new Array(count);
+		var addrrr_array_pc = new Array(ttarr.length);
+		
+		for (i=0;i<count;i++){
+			instrr_array[i] = t_instrr_array[i];
+			addrrr_array[i] = t_addrrr_array[i];
+		}
+		
+		var instr_typ = instrr_array.length;
+		document.getElementById('instructions_typed').innerHTML=instr_typ;
+		
 		/*total executions*/
 		var tot_instr = 0;
-	
-		reset_regs();
-	
-		//to_bin();
-		/*putting the text to an array*/
-		var tt = editor.getValue();
-		var ttarr = tt.split("\n");
-	
-		/*removing comments*/
-		for (i=0;i<ttarr.length;i++){
-			if (ttarr[i].indexOf("@") > -1) {
-				var remove_at = ttarr[i].split("@");
-				ttarr.splice(i,1,remove_at[0]);
-			}
-		}
-	
-
 	
 		var no_of_all_lines = ttarr.length;
 	
 		handle_data(ttarr,no_of_all_lines);
-	
+		
 		var no_of_lines = document.getElementById('line_number').value;//no. of lines to be executed
-	
+		
 		if(!no_of_lines) {
 			var err1 = "----Error1----\nEnter the number of lines";
 			document.getElementById('out').innerHTML = err1;
-		return;
+			return;
 		}
 		else if(no_of_lines > no_of_all_lines) {
 			var err2 = "----Error2----\nNumber entered exceeds number of lines";
 			document.getElementById('out').innerHTML = err2;
 			return;
 		}
+		else if(no_of_lines < 1) {
+			var err3 = "----Error3----\nNumber of lines should be more than 0";
+			document.getElementById('out').innerHTML = err3;
+			return;
+		}
+		
 		for (i=0;i<no_of_lines;i++){
-			document.getElementById('pc').innerHTML=(i+1);
-			document.getElementById('instructions').innerHTML=tot_instr;
-			//var ty = ttarr[i].trim();
-			//alert("---@"+ty+"@-----");
-			if ((ttarr[i].indexOf("mov") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				implement_mov(ttarr[i]);
+
+			var stt_ins = ttarr[i];
+			//alert(stt_ins);
+			if ((stt_ins.indexOf("mov") > -1)&(stt_ins.indexOf(":") < 0)) {
+				implement_mov(stt_ins);
 				tot_instr++;
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			else if ((ttarr[i].indexOf("add") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				implement_add(ttarr[i]);
+			else if ((stt_ins.indexOf("add") > -1)&(stt_ins.indexOf(":") < 0)) {
+				implement_add(stt_ins);
 				tot_instr++;
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			else if ((ttarr[i].indexOf("sub") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				implement_sub(ttarr[i]);
+			else if ((stt_ins.indexOf("sub") > -1)&(stt_ins.indexOf(":") < 0)) {
+				implement_sub(stt_ins);
 				tot_instr++;
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			else if ((ttarr[i].indexOf("cmp") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				var condition = implement_cmp(ttarr[i]);
+			else if ((stt_ins.indexOf("cmp") > -1)&(stt_ins.indexOf(":") < 0)) {
+				var condition = implement_cmp(stt_ins);
+				
 				tot_instr++;
 				i++;
-				var t =implement_conditional_branch(ttarr[i],condition,i);
+				stt_ins=ttarr[i];
+				var t =implement_conditional_branch(stt_ins,condition,i);
 				if(i!=t) {
 					tot_instr++;
+					document.getElementById('instructions').innerHTML=tot_instr;
 					i = t;
 				}
 				else {i = t}; 
 			}
-			else if (((ttarr[i].indexOf("b ") > -1)|(ttarr[i].indexOf("b	") > -1)|(ttarr[i].indexOf("bl") > -1))&(ttarr[i].indexOf(":") < 0)) {
-				implement_branch(ttarr[i],(i+1));
+			else if (((stt_ins.indexOf("b ") > -1)|(stt_ins.indexOf("b	") > -1)|(stt_ins.indexOf("bl") > -1))&(stt_ins.indexOf(":") < 0)) {
+				implement_branch(stt_ins,(i+1));
 				tot_instr++;
+				
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			else if ((ttarr[i].indexOf("ldr") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				implement_load(ttarr[i]);
+			else if ((stt_ins.indexOf("ldr") > -1)&(stt_ins.indexOf(":") < 0)) {
+				implement_load(stt_ins);
 				tot_instr++;
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			else if ((ttarr[i].indexOf("str") > -1)&(ttarr[i].indexOf(":") < 0)) {
-				implement_store(ttarr[i]);
+			else if ((stt_ins.indexOf("str") > -1)&(stt_ins.indexOf(":") < 0)) {
+				implement_store(stt_ins);
 				tot_instr++;
+				document.getElementById('instructions').innerHTML=tot_instr;
 			}
+			put_vals("pc",i);
 		}
 	
 	
@@ -252,6 +277,7 @@ function map_commands()
 				else if (register_val.indexOf("pc") > -1) register_val = pc;
 			}
 			var reggit = drop_hash(register_val);
+			//alert("reggit: "+typeof(reggit));
 			put_vals(register,reggit);
 			
 			
@@ -390,6 +416,7 @@ function map_commands()
 		else{
 			val2 = drop_hash(reg_2);
 		}
+		
 		if (val1>val2) return 1; 
 		else if (val1==val2) return 0;
 		else if (val1<val2) return -1;
@@ -414,7 +441,7 @@ function implement_conditional_branch(str,condition,i) {
 	}
 	else if ((command=="beq")&(condition == 0)){
 		var w = find_label(label);
-		//alert("found label: "+w);
+		
 		////alert ("Still in fun2");
 		return w;
 	}
@@ -562,7 +589,7 @@ function handle_data(ttarr,total_lines){
 function reset_regs(){
 	put_vals("sp",15);
 	put_vals("lr",100);
-	var all_regs = ["r0","r1","r2","r3","r4","r5","r6","r7","r8","r9","r10","r11","r12","pc","instructions"];
+	var all_regs = ["r0","r1","r2","r3","r4","r5","r6","r7","r8","r9","r10","r11","r12","pc","instructions","i0","i1","i2","i3","i4","i5","i6","i7","i8","i9","i10","i11","i12","i13","i14","i15"];
 	for (i=0;i<all_regs.length;i++){
 		put_vals(all_regs[i],"");
 	}
@@ -620,6 +647,24 @@ function drop_hash(str) {
 }
 /*--------------------------------------------------------------------------------------------------------------*/
 
-
-
+function to_up(){
+	var no_of_lines = document.getElementById('line_number').value;
+	
+	no_of_lines--;
+	
+	document.getElementById('line_number').value = no_of_lines;
+	
+	map_commands();
+	return;
+}
+function to_down(){
+	var no_of_lines = document.getElementById('line_number').value;
+	
+	no_of_lines++;
+	
+	document.getElementById('line_number').value = no_of_lines;
+	
+	map_commands();
+	return;
+}
 	

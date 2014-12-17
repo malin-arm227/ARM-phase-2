@@ -12,15 +12,24 @@
 <img src="logo.png">
 <button id="assemble" onclick="map_commands()">Assemble</button>
 <button id="reset_reg" onclick="reset_regs()">Reset</button>
-<button id="step_up" onclick="step_up()">Step up</button>
-<button id="step_down" onclick="reset_regs()">Step down</button><br>
+<button id="step_up" onclick="to_up()">Move up</button>
+<button id="step_down" onclick="to_down()">Move down</button><br>
 
-<input type="radio" id="format_hex" name="typef" value="Hex"	onclick="change_format()" />Hex<br />
-<input type="radio" id="format_bin" name="typef" value="Bin"  onclick="change_format()" />Bin<br />
+<div id = "rads">
+<input type="radio" id="format_hex" name="typef" value="Hex"  onclick="change_format()" />Hex
+<input type="radio" id="format_bin" name="typef" value="Bin"  onclick="change_format()" />Bin
 <input type="radio" id="format_dec" name="typef" value="Dec"  checked="checked" onclick="change_format()" />Dec<br />
+</div>
 
-No. of instructions:<div id="instructions">0</div> 
-Line number:<input type="text" id="line_number" name="eee" size="4">
+<div id="instructions_typed_tag">No. of instructions:</div>
+<div id="instructions_typed">0</div>
+
+<div id="instructions_typed_ex_tag">No. of instructions executed:</div>
+<div id="instructions">0</div>
+ 
+<div id="line_tag">Line number:</div>
+<input type="text" id="line_number" name="eee" size="1">
+
 <table id ="regs" border="1">
   <tr>
     <th>Register</th>
@@ -92,52 +101,78 @@ Line number:<input type="text" id="line_number" name="eee" size="4">
   </tr>
 </table>
 
+<div id="st_tag">Stack</div>
 
 <table id="stack" border="1">
+
   <tr>
-    <th>Stack</th>
+	<td id="s0">0</td>
+    <td id="i0"></td>
   </tr>
   <tr>
-    <td id="s0">00</td>
-    <!--indicator 0-->
+	 <td id="s1">4</td>
+    <td id="i1"></td>
   </tr>
   <tr>
-    <td id="i0">0</td>
-    <td id="i1">1</td>
-    <td id="i2">2</td>
-    <td id="i3">3</td>
+	  <td id="s2">8</td>
+    <td id="i2"></td>
   </tr>
   <tr>
-    <td id="s4">04</td>
+	  <td id="s3">12</td>
+	<td id="i3"></td>
   </tr>
   <tr>
-    <td id="i4">4</td>
-    <td id="i5">5</td>
-    <td id="i6">6</td>
-    <td id="i7">7</td>
+	  <td id="s4">16</td>
+	<td id="i4"></td>
   </tr>
   <tr>
-   <td id="s8">08</td>
+	  <td id="s5">20</td>
+    <td id="i5"></td>
   </tr>
   <tr>
-   <td id="i8">8</td>
-    <td id="i9">9</td>
-    <td id="i10">10</td>
-    <td id="i11">11</td>
+	  <td id="s6">24</td>
+	<td id="i6"></td>
   </tr>
   <tr>
-    <td id="s12">12</td>
+	  <td id="s7">28</td>
+    <td id="i7"></td>
   </tr>
   <tr>
-    <td id="i12">12</td>
-    <td id="i13">13</td>
-    <td id="i14">14</td>
-    <td id="i15">15</td>
+	  <td id="s8">32</td>
+    <td id="i8"></td>
+  </tr>
+  <tr>
+	  <td id="s9">36</td>
+    <td id="i9"></td>
+  </tr>
+  <tr>
+	  <td id="s10">40</td>
+	<td id="i10"></td>
+  </tr>
+  <tr>
+	  <td id="s11">44</td>
+	<td id="i11"></td>
+  </tr>
+  <tr>
+	  <td id="s12">48</td>
+    <td id="i12"></td>
+  </tr>
+  <tr>
+	  <td id="s13">52</td>
+	<td id="i13"></td>
+  </tr>
+  <tr>
+	  <td id="s14">56</td>
+	<td id="i14"></td>
+  </tr>
+  <tr>
+	  <td id="s15">60</td>
+	<td id="i15"></td>
   </tr>
 </table>
 
-<div id="data_memory">Data memory</div>
-<table>
+<div id="data_mem">Data memory</div>
+<table id="data_memory">
   <tr>
     <th>Location</th>
     <th>Label</th>
@@ -183,7 +218,7 @@ Line number:<input type="text" id="line_number" name="eee" size="4">
 <tr>
 	
 <td colspan="3">
-<div id="textin">#Enter your code here
+<div id="textin">@Enter your code here
 
 	.text		
 	.global main
@@ -202,7 +237,6 @@ main:
 </tr>
 
 <tr>
-<!--<td>Select a File to Load:</td>-->
 <td><input type="file" id="fileToLoad" class="custom-file-input"></td>
 <td><button id="loadtext" onclick="loadFileAsText();">Load Selected File</button><td>
 </tr>

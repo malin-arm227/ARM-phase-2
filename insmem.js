@@ -4,23 +4,23 @@ function create_mem(){
 	
 	
 	var twt = editor.getValue();
-	var ttarwr = twt.split("\n");
+	var ttarr = twt.split("\n");
 	
 	/*removing comments*/
-	for (i=0;i<ttarwr.length;i++){
-		if (ttarwr[i].indexOf("@") > -1) {
-			var remove_at = ttarwr[i].split("@");
-			ttarwr.splice(i,1,remove_at[0]);
+	for (i=0;i<ttarr.length;i++){
+		if (ttarr[i].indexOf("@") > -1) {
+			var remove_at = ttarr[i].split("@");
+			ttarr.splice(i,1,remove_at[0]);
 		}
 	}
-	var instr_array = new Array(ttarwr.length);
-	var address_array = new Array(ttarwr.length);
-	var printing_array = new Array(ttarwr.length);
+	var instr_array = new Array(ttarr.length);
+	var address_array = new Array(ttarr.length);
+	var printing_array = new Array(ttarr.length);
 	
-	var stringg = new Array(ttarwr.length);
+	var stringg = new Array(ttarr.length);
 	
-	for (i=0;i<ttarwr.length;i++){
-		stringg[i] = ttarwr[i].trim();
+	for (i=0;i<ttarr.length;i++){
+		stringg[i] = ttarr[i].trim();
 	}
 	
 	for (i=0;i<instr_array.length;i++){
@@ -48,21 +48,30 @@ function create_mem(){
 	//alert(instr_array.length);
 	//alert(address_array.length);
 	
+	var ui = 0;
 	
-	
-	for (i=0;i<instr_array.length;i++){
+	for (i=0;i<ttarr.length;i++){
 		if (address_array[i] != "err"){
 			//alert(instr_array[i]);
-			var y = dec_ins_mem(instr_array[i],instr_array);
+			var y = dec_ins_mem(ttarr[i],ttarr);
 			var u = print_ins(address_array[i],y);
 			
-			printing_array[i] = u;		
+			printing_array[i] = u;
+			if (u!="") ui++;		
 		}
 	}
-	document.getElementById('inmem').innerHTML = printing_array;
+	var printing_array_final = new Array(ui);
+
+	for (i=0;i<ui;i++){
+		printing_array_final[i] = printing_array[i]; 
+	}
+	document.getElementById('inmem').innerHTML = printing_array_final;
 		
-		return;
+	return [instr_array,address_array,ttarr,ui];
 }
+
+
+
 function dec_ins_mem (str,instr_array){
 	
 	function find_label(label_raw){
@@ -71,8 +80,8 @@ function dec_ins_mem (str,instr_array){
 		if (label == "printf:") {return 100;}
 		else if (label == "scanf:") {return 200;}
 		
-		for (i=0;i<instr_array.length;i++){
-			if(instr_array[i].indexOf(label) > -1){
+		for (i=0;i<ttarr.length;i++){
+			if(ttarr[i].indexOf(label) > -1){
 				return(i);
 			}
 		}
@@ -127,26 +136,24 @@ function dec_ins_mem (str,instr_array){
 			return t;
 		}
 		else if ((instr.indexOf("b ") > -1)|(instr.indexOf("b	") > -1)&(instr.indexOf(":") < 0)) {
-			var regs_add = instr.split(/[\s|,]+/);
-			var src1_reg = regs_add[1];
-			
-			var line_n = find_label(src1_reg);
-			alert("b: "+line_n);
-		
+			var t = "00000000000000000000000000000000";
+			return t;		
 		}
 		else if ((instr.indexOf("bl") > -1)&(instr.indexOf(":") < 0)) {
-			var regs_add = instr.split(/[\s|,]+/);
-			var src1_reg = regs_add[1];
-			
-			var line_n = find_label(src1_reg);
-			alert("bl: "+line_n);
-			
+			var t = "00000000000000000000000000000000";
+			return t;			
 		}
 		else if ((instr.indexOf("ldr") > -1)&(instr.indexOf(":") < 0)) {
-			alert(instr);
+			var t = dt_dec("00000000", "111111", "111111", "011001");
+			return t;
 		}
 		else if ((instr.indexOf("str") > -1)&(instr.indexOf(":") < 0)) {
-			alert(instr);
+			var t = "00000000000000000000000000000000";
+			return t;
+		}
+		else {
+			var t = "00000000000000000000000000000000";
+			return t;
 		}
 }
 
@@ -197,6 +204,17 @@ function dp_dec (op,dest_reg,src1_reg,src2_reg){
 		
 		return (dec_ins);
 }
+
+function dt_dec(Rn, Rd, operand2, opCode){ 
+
+	var cond = 14;
+	var F = "01";
+	
+	var format = cond.toString(2) + F + opCode + Rn + Rd + operand2;
+	
+	return format;
+};
+
 
 function extend_string(str,copy_bit,no_of_bits){
 	while (str.length<no_of_bits){
