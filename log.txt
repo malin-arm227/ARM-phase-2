@@ -1,3 +1,15 @@
+commit 253b74480de54ddc17b2a8db9396dc342c54ac63
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Thu Dec 18 08:06:57 2014 +0530
+
+    instruction memory done
+
+commit a047ccbefcca867b22698c0f98e397f08ec78196
+Author: malin <e11313@ce.pdn.ac.lk>
+Date:   Wed Dec 17 09:28:55 2014 +0530
+
+    the log
+
 commit f431a5440b5d88180d9face3b5d8b66117b02618
 Author: malin <e11313@ce.pdn.ac.lk>
 Date:   Wed Dec 17 09:28:20 2014 +0530
