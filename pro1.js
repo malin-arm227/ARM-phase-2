@@ -46,7 +46,7 @@ function put_vals(dest_reg,val_ans_given){//val_ans_given is a number
 		val_ans = val_ans_given;
 	}
 	else {
-		//alert("val: "+typeof(val_ans_given));
+		//alert("val: "+val_ans_given+"          "+typeof(val_ans_given));
 		val_ans = val_ans_given.toString();
 	}
 	//alert(dest_reg);
@@ -61,8 +61,8 @@ function put_vals(dest_reg,val_ans_given){//val_ans_given is a number
 	else if (dest_reg.indexOf("r8") > -1) { document.getElementById('r8').innerHTML=val_ans; r8 = val_ans_given;}
 	else if (dest_reg.indexOf("r9") > -1) { document.getElementById('r9').innerHTML=val_ans; r9 = val_ans_given;}
 	else if (dest_reg.indexOf("r10") > -1) { document.getElementById('r10').innerHTML=val_ans; r10 = val_ans_given;}
-	else if (dest_reg.indexOf("r1") > -1) { document.getElementById('r11').innerHTML=val_ans; r11 = val_ans_given;}
-	else if (dest_reg.indexOf("r2") > -1) { document.getElementById('r12').innerHTML=val_ans; r12 = val_ans_given;}
+	else if (dest_reg.indexOf("r1") > -1) { document.getElementById('r1').innerHTML=val_ans; r1 = val_ans_given;}
+	else if (dest_reg.indexOf("r2") > -1) { document.getElementById('r2').innerHTML=val_ans; r2 = val_ans_given;}
 	else if (dest_reg.indexOf("sp") > -1) { document.getElementById('sp').innerHTML=val_ans; sp = val_ans_given; }
 	else if (dest_reg.indexOf("lr") > -1) { document.getElementById('lr').innerHTML=val_ans; lr = val_ans_given;}
 	else if (dest_reg.indexOf("pc") > -1) { document.getElementById('pc').innerHTML=val_ans; pc = val_ans_given;}
@@ -158,7 +158,7 @@ function map_commands()
 		
 		var instrr_array = new Array(count);
 		var addrrr_array = new Array(count);
-		var addrrr_array_pc = new Array(ttarr.length);
+		//var addrrr_array_pc = new Array(ttarr.length);
 		
 		for (i=0;i<count;i++){
 			instrr_array[i] = t_instrr_array[i];
@@ -167,13 +167,12 @@ function map_commands()
 		
 		var instr_typ = instrr_array.length;
 		document.getElementById('instructions_typed').innerHTML=instr_typ;
-		
+		//alert(instrr_array+"DFDFDF");
 		/*total executions*/
 		var tot_instr = 0;
 	
-		var no_of_all_lines = ttarr.length;
-	
-		handle_data(ttarr,no_of_all_lines);
+		var no_of_all_lines = instrr_array.length;
+		handle_data(ttarr,ttarr.length);
 		
 		var no_of_lines = document.getElementById('line_number').value;//no. of lines to be executed
 		
@@ -183,7 +182,7 @@ function map_commands()
 			return;
 		}
 		else if(no_of_lines > no_of_all_lines) {
-			var err2 = "----Error2----\nNumber entered exceeds number of lines";
+			var err2 = "----Error2----\nNumber entered exceeds number of instructions";
 			document.getElementById('out').innerHTML = err2;
 			return;
 		}
@@ -192,10 +191,10 @@ function map_commands()
 			document.getElementById('out').innerHTML = err3;
 			return;
 		}
-		
+		//alert(addrrr_array);
 		for (i=0;i<no_of_lines;i++){
-
-			var stt_ins = ttarr[i];
+			put_vals("pc",addrrr_array[i]);
+			var stt_ins = instrr_array[i];
 			//alert(stt_ins);
 			if ((stt_ins.indexOf("mov") > -1)&(stt_ins.indexOf(":") < 0)) {
 				implement_mov(stt_ins);
@@ -217,7 +216,7 @@ function map_commands()
 				
 				tot_instr++;
 				i++;
-				stt_ins=ttarr[i];
+				stt_ins=instrr_array[i];
 				var t =implement_conditional_branch(stt_ins,condition,i);
 				if(i!=t) {
 					tot_instr++;
@@ -242,7 +241,7 @@ function map_commands()
 				tot_instr++;
 				document.getElementById('instructions').innerHTML=tot_instr;
 			}
-			put_vals("pc",i);
+			
 		}
 	
 	
@@ -383,8 +382,8 @@ function map_commands()
 	function find_label(label_raw){
 		var label = label_raw+":";
 	
-		for (i=0;i<ttarr.length;i++){
-			if(ttarr[i].indexOf(label) > -1){
+		for (i=0;i<instrr_array.length;i++){
+			if(instrr_array[i].indexOf(label) > -1){
 				return(i);
 			}
 		}
@@ -431,7 +430,8 @@ function implement_conditional_branch(str,condition,i) {
 	
 	var command = regs_add[0];
 	var label = regs_add[1];
-	
+	//~ alert(command);
+	//~ alert(label);
 	/*handling beq*/
 	if ((command=="bne")&(condition != 0)){
 		var w = find_label(label);
@@ -439,10 +439,10 @@ function implement_conditional_branch(str,condition,i) {
 		////alert ("Still in fun2");
 		return w;
 	}
-	else if ((command=="beq")&(condition == 0)){
+	else if ((command=="beq")&&(condition == 0)){
 		var w = find_label(label);
 		
-		////alert ("Still in fun2");
+		//~ alert ("Still in fun2");
 		return w;
 	}
 	/*handling bne*/
@@ -472,7 +472,9 @@ function implement_branch(str,line){
 	
 	/*handling b*/
 	if (command=="b"){
+		
 		var w = find_label(label);
+		
 		return w;
 	}
 	
@@ -495,8 +497,11 @@ function implement_load(strng){
 	if(mem_loc.indexOf("=") > -1){
 		
 		mem_loc = mem_loc.substr(1);
+		//alert(mem_loc);
 		var index_label = label_array.indexOf(mem_loc);
+		//alert(index_label);
 		var index_add = address_array[index_label];
+		//alert(index_add);
 		document.getElementById(dest_reg).innerHTML=index_add;
 		return;
 	}
@@ -549,6 +554,7 @@ function implement_store(strng){
 /*handles data memory*/
 function handle_data(ttarr,total_lines){
 	var i;
+	//alert(ttarr);
 	var chck = 0;
 	for (i=0;i<ttarr.length;i++){
 		if (ttarr[i].indexOf(".data") > -1){
@@ -556,16 +562,20 @@ function handle_data(ttarr,total_lines){
 			break;
 		}
 	}
+	
 	if (chck==0) return;
 	
 	var k = i+1;
+	
 	var j = 0;
 	while (k<total_lines){
-		//alert(ttarr[k]);
+		//~ alert(ttarr[k]);
+		//~ alert(ttarr[k].indexOf(":"));
 		if ((ttarr[k].indexOf(":") > -1)){
+			
 			var label_index = ttarr[k].indexOf(":");
 			var label = ttarr[k].substr(0,label_index);
-		
+			//~ alert(label);
 			var indx = ttarr[k].indexOf(".");
 			var substrs = ttarr[k].substr(indx);
 		
@@ -576,6 +586,8 @@ function handle_data(ttarr,total_lines){
 		}
 		k++;
 	}
+	//~ alert(label_array);
+	//~ alert(data_array);
 	put_data();
 }	
 /*--------------------------------------------------------------------------------------------------------------*/

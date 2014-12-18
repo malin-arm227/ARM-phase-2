@@ -247,13 +247,16 @@ main:
 <div id="outpane">
 
 <textarea id="theOut" name="toCompiler" style="display:none"></textarea>
-<input id="submit" type="button" value="Compile/Run" />
+<input id="submit" type="button" value="Assemble/Run" />
 <textarea id="stin" name="toComp" style="resize:none; display; background-color: transparent" placeholder="Standard input" ></textarea>
 
 </div>
 
 <textarea readonly style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Standard output" id="out" name="comment" ;></textarea>
-<textarea readonly style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Instruction memory" id="inmem" name="instructions_mem" ;></textarea>
+<!--<textarea readonly style="resize:none; color:#0431B4; background-color: #CECEF6;" placeholder="Instruction memory" id="inmem" name="instructions_mem" ;></textarea>-->
+
+<div id="inmem">
+</div>
 <footer>
 Developed by ARM 2
 </footer>
@@ -270,6 +273,8 @@ Developed by ARM 2
     editor.getSession().setMode("ace/mode/assembly_x86");
    // document.getElementById('editor').style.fontSize='20px';
    // editor.getSession().setTabSize(8);
+   var edinm = ace.edit("inmem");
+   edinm.setTheme("ace/theme/github");
 </script>
 
 <script type='text/javascript'>

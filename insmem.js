@@ -1,8 +1,5 @@
 function create_mem(){
 	
-	
-	
-	
 	var twt = editor.getValue();
 	var ttarr = twt.split("\n");
 	
@@ -13,6 +10,7 @@ function create_mem(){
 			ttarr.splice(i,1,remove_at[0]);
 		}
 	}
+	
 	var instr_array = new Array(ttarr.length);
 	var address_array = new Array(ttarr.length);
 	var printing_array = new Array(ttarr.length);
@@ -32,7 +30,7 @@ function create_mem(){
 	var i1 = stringg.indexOf(".global main");
 	var i2 = stringg.indexOf(".data");
 	var j=0;
-	for (i=(i1+2);i<i2;i++){
+	for (i=(i1+1);i<i2;i++){
 		//var stringg = ttarwr[i];
 		if (stringg[i] != "") {
 			
@@ -44,29 +42,27 @@ function create_mem(){
 			
 		}
 	}
-	//alert(instr_array);
-	//alert(instr_array.length);
-	//alert(address_array.length);
 	
 	var ui = 0;
 	
-	for (i=0;i<ttarr.length;i++){
+	for (i=0;i<instr_array.length;i++){
 		if (address_array[i] != "err"){
 			//alert(instr_array[i]);
-			var y = dec_ins_mem(ttarr[i],ttarr);
-			var u = print_ins(address_array[i],y);
+			var y = dec_ins_mem(instr_array[i],instr_array);
+			var u = print_ins(address_array[i],y[0],y[1]);
 			
 			printing_array[i] = u;
 			if (u!="") ui++;		
 		}
 	}
-	var printing_array_final = new Array(ui);
-
+	
+	//document.getElementById('inmem').innerHTML = printing_array_final;
+	var fnal_str = "";
 	for (i=0;i<ui;i++){
-		printing_array_final[i] = printing_array[i]; 
+		fnal_str = fnal_str+printing_array[i]+"";
 	}
-	document.getElementById('inmem').innerHTML = printing_array_final;
-		
+		edinm.setValue(fnal_str);
+		//edinm.setValue(printing_array_final[2]);
 	return [instr_array,address_array,ttarr,ui];
 }
 
@@ -95,13 +91,13 @@ function dec_ins_mem (str,instr_array){
 			
 			
 			var regs_add = instr.split(/[\s|,]+/);
-			//alert("mov");
+			
 			var register = regs_add[1];
 			var register_val = regs_add[2];
-			//alert(register);
+			
 			var t = dp_dec ("1101",register,"00",register_val);
-		
-			return t;
+			var q = "mov	"+register+", "+register_val;
+			return [t,q];
 		}
 		else if ((instr.indexOf("add") > -1)&(instr.indexOf(":") < 0)) {
 			
@@ -112,6 +108,8 @@ function dec_ins_mem (str,instr_array){
 			var src2_reg = regs_add[3];
 			
 			var t = dp_dec ("0100",dest_reg,src1_reg,src2_reg);
+			var q = "add	"+dest_reg+", "+src1_reg+", "+src2_reg;
+			return [t,q];
 		}
 		else if ((instr.indexOf("sub") > -1)&(instr.indexOf(":") < 0)) {
 			
@@ -122,7 +120,9 @@ function dec_ins_mem (str,instr_array){
 			var src2_reg = regs_add[3];
 			
 			var t = dp_dec ("0010",dest_reg,src1_reg,src2_reg);
-			return t;
+			
+			var q = "sub	"+dest_reg+", "+src1_reg+", "+src2_reg;
+			return [t,q];
 			
 		}
 		else if ((instr.indexOf("cmp") > -1)&(instr.indexOf(":") < 0)) {
@@ -133,27 +133,35 @@ function dec_ins_mem (str,instr_array){
 			var src2_reg = regs_add[2];
 			
 			var t = dp_dec ("1010",src1_reg,"00",src2_reg); 
-			return t;
+			
+			var q = "cmp	"+src1_reg+", "+src2_reg;
+			return [t,q];
+			
 		}
 		else if ((instr.indexOf("b ") > -1)|(instr.indexOf("b	") > -1)&(instr.indexOf(":") < 0)) {
 			var t = "00000000000000000000000000000000";
-			return t;		
+			var q = "b b b b b b";
+			return [t,q];		
 		}
 		else if ((instr.indexOf("bl") > -1)&(instr.indexOf(":") < 0)) {
 			var t = "00000000000000000000000000000000";
-			return t;			
+			var q = "bl bl bl bl bl bl";
+			return [t,q];		
 		}
 		else if ((instr.indexOf("ldr") > -1)&(instr.indexOf(":") < 0)) {
 			var t = dt_dec("00000000", "111111", "111111", "011001");
-			return t;
+			var q = "ldr ldr ldr";
+			return [t,q];
 		}
 		else if ((instr.indexOf("str") > -1)&(instr.indexOf(":") < 0)) {
 			var t = "00000000000000000000000000000000";
-			return t;
+			var q = "str str str";
+			return [t,q];
 		}
 		else {
 			var t = "00000000000000000000000000000000";
-			return t;
+			var q = instr;
+			return [t,q];
 		}
 }
 
@@ -176,14 +184,12 @@ function dp_dec (op,dest_reg,src1_reg,src2_reg){
 		
 		var rd_temp1 = dest_reg.substr(1);//rd field
 		var rd_temp2 = parseInt(rd_temp1);
-		//var rd = rd_temp2.toString(2);
 		var rd = extend_string(rd_temp2.toString(2),"0",4);
 		
 		
 		
 		var rn_temp1 = src1_reg.substr(1);//rn field
 		var rn_temp2 = parseInt(rn_temp1);
-		//var rn = rn_temp2.toString(2);
 		var rn = extend_string(rn_temp2.toString(2),"0",4);
 		
 		var i="0";//immediate field
@@ -223,14 +229,11 @@ function extend_string(str,copy_bit,no_of_bits){
 	return str; 
 }
 
-function print_ins(add,ins){
+function print_ins(add,ins,str){
 	
 	var add_long = extend_string(add,"0",8);
 	
-	var print_this = add_long+"	 	"+ins+"\n";
+	var print_this = add_long+" : "+ins+" || "+str+"\n";
 	
 	return print_this;
-	//document.getElementById('inmem').innerHTML = "\n";
 }
-
-

@@ -85,5 +85,5 @@ else{
 shell_exec("rm -f armfile.s");
 shell_exec("rm -f armfile");
 
-session_destroy();
+
 ?>
